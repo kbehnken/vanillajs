@@ -47,6 +47,9 @@
                 margin: auto;
             }
 
+            .filter {
+                padding-top: 10px;
+            }            
         </style>
     </head>
     <body>
@@ -54,13 +57,15 @@
             <section class="content-container">
                 <h1>Vanilla Javascript Example</h1>
                 <h2>People Table</h2>
-                <input id="filter-term" type="text" class="form-control" placeholder="Filter by first name" />
-                <button onClick="filterPeopleByFirstName()">
-                    Filter
-                </button>
-                <button onClick="clearFilter()">
-                    Reset
-                </button>
+                <div class="filter">
+                    <input id="filter-term" type="text" class="form-control" placeholder="Filter by first name" />
+                    <button onClick="filterPeopleByFirstName()">
+                        Filter
+                    </button>
+                    <button onClick="clearFilter()">
+                        Reset
+                    </button>
+                </div>
                 <p>
                     Click the table header to sort by column.
                 </p>
