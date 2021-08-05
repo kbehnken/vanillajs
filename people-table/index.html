@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Vanilla JS Example</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <style type="text/css">
+            body {
+                font-family: 'Roboto', sans-serif;
+                font-size: large;
+            }
+
+            th, td {
+                border: .5px solid #7a4ee9;
+                padding: 5px;
+            }
+
+            th {
+                font-weight: strong;
+                background-color: #d7c9f8;
+            }
+
+            .content-container {
+                text-align: center;
+                width: 50%;
+                padding: 0px 20px;
+                margin: auto;
+            }
+
+            a, button {
+                text-decoration: none;
+                color: #fff;
+                background-color: #7a4ee9;
+                border: none;
+                padding: 10px;
+                margin: 20px 0px;
+                display: inline-block;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <section class="content-container">
+                <h1>Vanilla Javascript Example</h1>
+                <h2>People Table</h2>
+                <input id="filter-term" type="text" class="form-control" placeholder="Filter by first name" />
+                <button onClick="filterPeopleByFirstName()">
+                    Filter
+                </button>
+                <button onClick="clearFilter()">
+                    Reset
+                </button>
+                <p>
+                    Click the table header to sort by column.
+                </p>
+                <table class="table table-dark table-striped">
+                    <thead>
+
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <a href="https://github.com/kbehnken/vanilla-js" target="_blank" rel="noopener noreferrer" style="margin: 20px 0px">
+                    View Code
+                </a>
+            </section>
+        </main>
+        <!-- Bootstrap Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+<script>
+    const people = [
+        {
+        firstName: 'Stan',
+        lastName: 'Marsh',
+        hairColor: 'brown'
+        },
+        {
+        firstName: 'Anne',
+        lastName: 'Warbucks',
+        hairColor: 'red'
+        },
+        {
+        firstName: 'Johnny',
+        lastName: 'Rotten',
+        hairColor: 'blonde'
+        },
+        {
+        firstName: 'Johnny',
+        lastName: 'Walker',
+        hairColor: 'black'
+        }
+    ]
+
+    let state = '';
+    
+    function drawTable(data) {
+        let tableHead = document.querySelector('thead');
+        tableHead.innerHTML = '';
+        let headRow = tableHead.insertRow(-1);
+        let headersArr = ['First Name', 'Last Name', 'Hair Color'];
+        for (let i = 0; i < headersArr.length; i++) {
+            let headerItem = document.createElement('th');
+            let headerId = 'header-' + i;
+            headerItem.setAttribute('id', headerId);
+            headerItem.innerHTML = headersArr[i];
+            headRow.appendChild(headerItem);
+        }
+        let sortHeader0 = document.querySelector('#header-0');
+        sortHeader0.onclick = (() => {sortPeople('firstName')});
+        sortHeader0.style.cursor = 'pointer';
+        let sortHeader1 = document.querySelector('#header-1');
+        sortHeader1.onclick = (() => {sortPeople('lastName')});
+        sortHeader1.style.cursor = 'pointer';
+        let sortHeader2 = document.querySelector('#header-2');
+        sortHeader2.onclick = (() => {sortPeople('hairColor')});
+        sortHeader2.style.cursor = 'pointer';
+        let tableBody = document.querySelector('tbody');
+        tableBody.innerHTML = '';
+        data.map(item => {
+            let bodyRow = tableBody.insertRow(-1);
+            let cell1 = bodyRow.insertCell(0);
+            cell1.innerHTML = item.firstName;
+            let cell2 = bodyRow.insertCell(1);
+            cell2.innerHTML = item.lastName;
+            let cell3 = bodyRow.insertCell(2);
+            cell3.innerHTML = item.hairColor;
+        })
+    }
+    showUnfilteredPeople()
+    
+    function localeCompareFn(a, b) {
+        return a.firstName.localeCompare(b.firstName);
+    }
+
+    function sortPeople(column) {
+        const localeCompareFn = ((a, b) => {
+            return a[column].localeCompare(b[column])
+        });
+        let sortedPeople = [...people]
+        sortedPeople.sort(localeCompareFn);
+        if (state === '' || state === 'descending') {
+            state = 'ascending';
+            drawTable(sortedPeople);
+        } else if (state === 'ascending') {
+            state = 'descending';
+            drawTable(sortedPeople.reverse());
+        }
+    }
+
+    function filterPeopleByFirstName() {
+        const filteredPeople = people.filter(item => {
+            let filterTerm = document.querySelector('#filter-term').value;
+            if (item.firstName.toLowerCase().indexOf(filterTerm.toLowerCase()) >= 0) {
+                return true;
+            }
+        })
+        drawTable(filteredPeople);
+    }
+
+    function showUnfilteredPeople() {
+        drawTable(people);
+    }
+
+    function clearFilter() {
+        document.querySelector('#filter-term').value = '';
+        showUnfilteredPeople();
+    }
+</script>
