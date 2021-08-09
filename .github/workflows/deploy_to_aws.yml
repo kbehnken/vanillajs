@@ -22,5 +22,5 @@ jobs:
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
-          ssh katrinabehnken.com mkdir -p /opt/katrinabehnken.com/vanillajs
+          ssh deploy@katrinabehnken.com mkdir -p /opt/katrinabehnken.com/vanillajs
           rsync -avz people-table/index.html deploy@katrinabehnken.com:/opt/katrinabehnken.com/vanillajs/index.html
