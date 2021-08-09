@@ -1,0 +1,26 @@
+name: deploy_to_aws
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      
+      - uses: actions/checkout@v2
+          
+      - name: Install ssh key
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan katrinabehnken.com >> ~/.ssh/known_hosts
+          echo "${{ secrets.DEPLOY_KEY }}" >> ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add ~/.ssh/deploy_key    
+      
+      - name: Deploy project
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          mkdir -p /opt/katrinabehnken.com/vanillajs
+          rsync -avz people-table/index.html deploy@katrinabehnken.com:/opt/katrinabehnken.com/vanillajs/index.html
