@@ -1,7 +1,7 @@
 name: deploy_to_aws
 on: [push]
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       
@@ -22,5 +22,5 @@ jobs:
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
-          mkdir -p /opt/katrinabehnken.com/vanillajs
+          ssh katrinabehnken.com mkdir -p /opt/katrinabehnken.com/vanillajs
           rsync -avz people-table/index.html deploy@katrinabehnken.com:/opt/katrinabehnken.com/vanillajs/index.html
